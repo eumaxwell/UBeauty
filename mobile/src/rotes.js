@@ -12,8 +12,8 @@ export default function Routes() {
   return (
     <NavigationContainer>
       <AppStack.Navigator screenOptions={{headerShown: false}}>
+      <AppStack.Screen name="Map" component={MapPage} />
         <AppStack.Screen name="Login" component={LoginPage} />
-        <AppStack.Screen name="Map" component={MapPage} />
         <AppStack.Screen name="Maker" component={MakerPage} />
       </AppStack.Navigator>
     </NavigationContainer>

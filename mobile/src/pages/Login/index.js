@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
+import { View, TextInput, Text, Image, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 import api from "../../services/api";
 import styles from "./styles";
-import logoImg from "../../assets/logo.png";
+import logoImg from "../../../assets/logo.png";
 
 export default function Login() {
   const navigation = useNavigation();

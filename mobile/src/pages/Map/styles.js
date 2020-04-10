@@ -8,6 +8,7 @@ export default StyleSheet.create({
     paddingTop: Constants.statusBarHeight + 20,
   },
   header: {
+    flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -21,8 +22,8 @@ export default StyleSheet.create({
   },
   modal: {},
   modalButton: {},
-  body: {},
-  bodyMap: {},
+  body: {flex: 5},
+  bodyMap: {  },
   bodyAvatar: {},
   bodyCallout: {},
   bodyMakerName: {},

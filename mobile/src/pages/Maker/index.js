@@ -5,7 +5,6 @@ import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 import api from "../../services/api";
 import styles from "./styles";
-import Gallery from "react-native-image-gallery";
 
 export default function Maker({ makerId }) {
   const navigation = useNavigation();
@@ -53,7 +52,7 @@ export default function Maker({ makerId }) {
         style={{ flex: 1, backgroundColor: "black" }}
         images={[
           {
-            source: require("yourApp/image.png"),
+            source: require("../../../assets/logo.png"),
             dimensions: { width: 150, height: 150 },
           },
           { source: { uri: "http://i.imgur.com/XP2BE7q.jpg" } },

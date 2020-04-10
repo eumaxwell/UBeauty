@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "./node_modules/react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, Image, TouchableOpacity, Modal } from "react-native";
 import MapView, { Marker, Callout } from "react-native-maps";
-import { useNavigation } from "./node_modules/@react-navigation/native";
-import { Feather } from "./node_modules/@expo/vector-icons";
+import { getCurrentPositionAsync, requestPermissionsAsync } from 'expo-location'
+import { useNavigation } from "@react-navigation/native";
+import { Feather } from "@expo/vector-icons";
 import api from "../../services/api";
 import styles from "./styles";
-import logoImg from "../../assets/logo.png";
+import logoImg from "../../../assets/logo.png";
 
 export default function Map() {
   const navigation = useNavigation();
@@ -15,29 +16,34 @@ export default function Map() {
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    async function loadMyInitialPosition() {
-      const { granted } = await requestPermissionsAsync();
-      if (granted) {
-        const { coords } = await getCurrentPositionAsync({
-          enableHighAccuracy: true,
-        });
-
-        const { latitude, longitude } = coords;
-
-        setCurrentRegion({
-          latitude,
-          longitude,
-          latitudeDelta: 0.04,
-          longitudeDelta: 0.04,
-        });
-      }
-    }
     loadMyInitialPosition();
     loadMakers();
   }, []);
 
+  async function loadMyInitialPosition() {
+    const { granted } = await requestPermissionsAsync();
+    if (granted) {
+      const { coords } = await getCurrentPositionAsync({
+        enableHighAccuracy: true,
+      });
+
+      console.log(coords)
+      const { latitude, longitude } = coords;
+
+      setCurrentRegion({
+        latitude,
+        longitude,
+        latitudeDelta: 0.04,
+        longitudeDelta: 0.04,
+      });
+    }
+  }
+
+  function onRegionChange(region) {
+    setCurrentRegion({ region })
+  }
+
   function setModalFilters() {
-    // 
     loadMakers()
   }
 
@@ -59,31 +65,30 @@ export default function Map() {
         <Text style={styles.headerTitle}>Bem-vindo!</Text>
       </View>
 
-      <TouchableOpacity
-        style={styles.modalButton}
-        onPress={() => setModalVisible(true)}
-      >
-        <Feather name="arrow-left" size={28} color="#E02041" />
-      </TouchableOpacity>
-
-      <Modal isVisible={modalVisible} style={styles.modal}>
-        <Text>I am the modal content!</Text>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => setModalVisible(false)}
-        >
-          <Feather name="arrow-left" size={28} color="#E02041" />
-          <Text style={styles.buttonText}>Search</Text>
-        </TouchableOpacity>
-      </Modal>
-
       <View style={styles.body}>
         <MapView
-          onRegionChangeComplete={handleRegionChanged}
-          initialRegion={currentRegion}
+          initialRegion={{
+            latitude: 37.78825,
+            longitude: -122.4324,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        />
+
+      </View>
+    </View>
+  );
+}
+/*
+
+        <MapView
+          region={currentRegion}
+          onRegionChange={onRegionChange}
           style={styles.bodyMap}
         >
-          {makers.map((maker) => (
+        </MapView>
+
+{makers.map((maker) => (
             <Marker
               key={maker._id}
               coordinate={{
@@ -104,8 +109,24 @@ export default function Map() {
               </Callout>
             </Marker>
           ))}
-        </MapView>
-      </View>
-    </View>
-  );
-}
+
+ */
+
+/*
+<TouchableOpacity
+style={styles.modalButton}
+onPress={() => setModalVisible(true)}
+>
+<Feather name="arrow-left" size={28} color="#E02041" />
+</TouchableOpacity>
+
+<Modal isVisible={modalVisible} style={styles.modal}>
+<Text>I am the modal content!</Text>
+<TouchableOpacity
+  style={styles.button}
+  onPress={() => setModalVisible(false)}
+>
+  <Feather name="arrow-left" size={28} color="#E02041" />
+  <Text style={styles.buttonText}>Search</Text>
+</TouchableOpacity>
+</Modal>*/
