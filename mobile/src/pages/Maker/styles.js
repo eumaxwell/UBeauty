@@ -24,13 +24,15 @@ export default StyleSheet.create({
   button: {},
   buttonText: {},
 
-  body: {},
+  body: {flex: 1,},
   actionTitle: {},
   
   
   galery: {},
 
-  servicesList: {},
+  servicesList: {
+    backgroundColor: 'white'
+  },
   service: {},
   serviceDescription: {},
   servicePrice: {},

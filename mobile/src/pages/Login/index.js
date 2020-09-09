@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import { View, TextInput, Text, Image, TouchableOpacity, Alert } from "react-native";
+import { View, TextInput, Text, Image, TouchableOpacity, Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Feather } from "@expo/vector-icons";
+import { getCurrentPositionAsync, requestPermissionsAsync } from 'expo-location'
 import api from "../../services/api";
 import styles from "./styles";
 import logoImg from "../../../assets/logo.png";
 
 export default function Login() {
   const navigation = useNavigation();
-  const [user, setUser] = useState();
-  const [password, setPassword] = useState();
+  const [user, setUser] = useState("Max");
+  const [password, setPassword] = useState("123");
 
   async function handleLogin() {
     try {
@@ -25,6 +25,12 @@ export default function Login() {
     }
   }
 
+  async function handleNewUser() {
+    console.log(user, password)
+    const response = await api.post("login", { user, password });
+    console.log(response.data)
+  }
+
   return (
     <View style={styles.container}>
 
@@ -36,25 +42,46 @@ export default function Login() {
       <View style={styles.body}>
         <TextInput
           style={styles.bodyInput}
-          placeholder="ID"
+          placeholder="Usuario"
           placeholderTextColor="#9a73ef"
           returnKeyType="go"
           autoCorrect={false}
         />
         <TextInput
           style={styles.bodyInput}
-          placeholder="Password"
+          placeholder="Senha"
           placeholderTextColor="#9a73ef"
           returnKeyType="go"
           secureTextEntry
           autoCorrect={false}
         />
-        <TouchableOpacity style={styles.bodyButton} onPress={handleLogin}>
-          <Text style={styles.detailsButtonText}>Ver Mais detalhes</Text>
-          <Feather name="arrow-right" size={16} color="#E02041" />
-        </TouchableOpacity>
+        <Button
+          onPress={handleLogin}
+          title="Entrar"
+        />
       </View>
-      
+
+      <View >
+
+        <TextInput
+          style={styles.bodyInput}
+          placeholder="Usuario"
+          value={user}
+          onChange={e => setUser(e.target.value)}
+        />
+        <TextInput
+          style={styles.bodyInput}
+          placeholder="Senha"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+        />
+        <Button
+          onPress={handleNewUser}
+          title="Criar Novo Usuario"
+        />
+
+      </View>
+
     </View>
   );
 }

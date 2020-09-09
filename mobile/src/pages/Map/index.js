@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, TouchableOpacity, Modal } from "react-native";
+import { View, Text, Image, Button } from "react-native";
 import MapView, { Marker, Callout } from "react-native-maps";
 import { getCurrentPositionAsync, requestPermissionsAsync } from 'expo-location'
 import { useNavigation } from "@react-navigation/native";
@@ -12,7 +12,7 @@ export default function Map() {
   const navigation = useNavigation();
   const [makers, setMakers] = useState([]);
   const [currentRegion, setCurrentRegion] = useState(null);
-  const [filters, setFilters] = useState([]);
+  const [filters, setFilters] = useState([""]);
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
@@ -27,14 +27,14 @@ export default function Map() {
         enableHighAccuracy: true,
       });
 
-      console.log(coords)
+      //console.log(coords)
       const { latitude, longitude } = coords;
 
       setCurrentRegion({
         latitude,
         longitude,
-        latitudeDelta: 0.04,
-        longitudeDelta: 0.04,
+        latitudeDelta: 0.03,
+        longitudeDelta: 0.03,
       });
     }
   }
@@ -48,38 +48,88 @@ export default function Map() {
   }
 
   async function loadMakers() {
-    const response = await api.get("/search", {
-      params: { currentRegion, filters },
-    });
-    setMakers(response);
+    console.log("loadMakers")
+
+    if (currentRegion) {
+      try {
+        console.log("currentRegion", currentRegion, "filtros", filters)
+        const { latitude, longitude } = currentRegion
+        await api.get('/search', {
+          params: {
+            latitude,
+            longitude,
+            filters
+          }
+        }).then(response => {
+          setMakers(response.data)
+        });
+      } catch (error) {
+        console.log("error", error)
+      }
+
+    }
+    else {
+      console.log("currentRegion null")
+    }
+    console.log("makers", makers)
   }
 
-  function openMaker(maker) {
-    navigation.navigate("Maker", maker.id);
+  function openLogin() {
+    navigation.navigate("LoginPage");
   }
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Image source={logoImg} />
-        <Text style={styles.headerTitle}>Bem-vindo!</Text>
+        <Image source={logoImg} style={{
+          width: 250,
+          height: 100
+        }} />
+
+        <Button
+          style={styles.logginButton}
+          onPress={openLogin}
+          title="Login"
+          accessibilityLabel="Login" />
+        <Button
+          style={styles.logginButton}
+          onPress={loadMakers}
+          title="Reload" />
       </View>
 
       <View style={styles.body}>
-        <MapView
-          initialRegion={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-        />
-
+        <MapView style={styles.bodyMap}
+          initialRegion={currentRegion}
+        >
+          {
+            makers.map(marker => (
+              <Marker
+                key={marker._id}
+                coordinate={{
+                  longitude: marker.location.coordinates[0],
+                  latitude: marker.location.coordinates[1],
+                }} marker
+              >
+                <Callout onPress={() => {
+                  navigation.navigate('MakerPage', { maker: marker })
+                }}>
+                  <View style={styles.callout}>
+                    <Text style={styles.devName}>{marker.name}</Text>
+                  </View>
+                </Callout>
+              </Marker>
+            ))
+          }
+        </MapView>
       </View>
     </View>
   );
 }
+
 /*
+
+
+
 
         <MapView
           region={currentRegion}

@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import Constants from "expo-constants";
+import { Dimensions } from 'react-native';
 
 export default StyleSheet.create({
   container: {
@@ -10,7 +11,6 @@ export default StyleSheet.create({
   header: {
     flex: 1,
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
   },
   headerTitle: {
@@ -20,10 +20,14 @@ export default StyleSheet.create({
     color: "#13131a",
     fontWeight: "bold",
   },
+  logginButton: {},
   modal: {},
   modalButton: {},
-  body: {flex: 5},
-  bodyMap: {  },
+  body: { flex: 5 },
+  bodyMap: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  },
   bodyAvatar: {},
   bodyCallout: {},
   bodyMakerName: {},
