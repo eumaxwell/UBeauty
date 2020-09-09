@@ -3,17 +3,24 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const http = require('http')
 const routes = require('./routes')
-const { setupWebSocket } = require('./websocket')
+//const { setupWebSocket } = require('./websocket')
 
 const app = express()
 const server = http.Server(app)
 
-setupWebSocket(server)
-
+//setupWebSocket(server)
+mongoose.set('useCreateIndex', true);
+// mongodb+srv://ubeautyUser:user@cluster0.nhj5b.gcp.mongodb.net/ubeauty?retryWrites=true&w=majority
+mongoose.connect('mongodb+srv://ubeautyUser:user@cluster0.nhj5b.gcp.mongodb.net/ubeauty?retryWrites=true&w=majority', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+/*
 mongoose.connect('mongodb+srv://omnistack:123@testemongodb-2n5hv.gcp.mongodb.net/week10?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
+*/
 
 // get, post, put, delete
 // Query params: req.query (Filtros, ordenação, paginação....)

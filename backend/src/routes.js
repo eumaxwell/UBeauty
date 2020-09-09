@@ -1,11 +1,16 @@
 const { Router } = require('express')
-const DevController = require('./controllers/DevController')
+const MakerController = require('./controllers/MakerController')
 const SearchController = require('./controllers/SearchController')
+const LoginController = require('./controllers/LoginController')
 
 const routes = Router()
 
-routes.get('/devs', DevController.index)
-routes.post('/devs', DevController.store)
+
+routes.get('/login', LoginController.index)
+routes.post('/login', LoginController.store)
+
+routes.get('/maker', MakerController.index)
+routes.post('/maker', MakerController.store)
 
 routes.get('/search', SearchController.index)
 

@@ -1,16 +1,19 @@
-const Dev = require('../models/Dev')
+const Maker = require('../models/Maker')
 const parseStringAsArray = require('../utils/parseStringAsArray')
 
-        // buscar todos os devs num raio de 10km
-        // filtrar por tecnologias
+// buscar todos os devs num raio de 10km
+// filtrar por tecnologias
 module.exports = {
     async index(req, res) {
-        const { nome, latitude, longitude, tecnologias } = req.query
-        const tecnologiasArray = parseStringAsArray(tecnologias)
-        const devs = await Dev.find({
-            tecnologias: {
-                $in: tecnologiasArray
-            },
+
+        const { latitude, longitude, filters } = req.query
+
+        console.log(latitude, longitude, filters)
+
+        const makers = await Maker.find({
+            /*services: {
+                $in: filters
+            },*/
             location: {
                 $near: {
                     $geometry: {
@@ -21,8 +24,10 @@ module.exports = {
                 }
             }
         })
+        //const makers = await Maker.find();
+        console.log(makers)
 
-        return res.json({ devs })
+        return res.json(makers)
 
     }
 }

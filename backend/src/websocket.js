@@ -1,3 +1,4 @@
+/*
 const socketio = require('socket.io')
 const parseStringAsArray = require('./utils/parseStringAsArray')
 const calculateDistance = require('./utils/calculateDistance')
@@ -35,3 +36,4 @@ exports.sendMessage = (to, message, data) => {
         io.to(connection.id).emit(message, data)
     })
 }
+*/
