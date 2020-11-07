@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, Button } from "react-native";
+import { View, Text } from "react-native";
 import MapView, { Marker, Callout } from "react-native-maps";
 import { getCurrentPositionAsync, requestPermissionsAsync } from 'expo-location'
 import { useNavigation } from "@react-navigation/native";
-import { Feather } from "@expo/vector-icons";
+// import { Feather, Ionicons } from "@expo/vector-icons";
 import api from "../../services/api";
 import styles from "./styles";
 import logoImg from "../../../assets/logo.png";
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
+import { Dimensions } from 'react-native';
+import { Fontisto, Ionicons } from '@expo/vector-icons';
+import { Button } from 'react-native-paper';
 
 export default function Map() {
   const navigation = useNavigation();
@@ -114,40 +117,51 @@ export default function Map() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Image source={logoImg} style={{
-          width: 250,
-          height: 100
-        }} />
 
-        <Button
-          style={styles.logginButton}
-          onPress={openLogin}
-          title="Login"
-          accessibilityLabel="Login" />
-      </View>
-      <Button
-        style={styles.logginButton}
-        onPress={() => navigation.navigate("TestePage")}
-        title="Reload" />
-      <View style={styles.body}>
-        <View>
+        <View style={styles.headerSearch}>
+          <Ionicons
+            style={{ padding: 16 }}
+            name='md-arrow-back'
+            size={30}
+            onPress={() => navigation.navigate("TestePage")}
+          />
           <SectionedMultiSelect
             single={false}
             showRemoveAll
             items={filters}
             uniqueKey="id"
             subKey="children"
-            selectText="Filtros selecionados..."
+            selectText="Buscar"
             showDropDowns={true}
             readOnlyHeadings={true}
             onSelectedItemsChange={onSelectedItemsChange}
             selectedItems={selectedFilters}
+            styles={{ selectToggle: { width: Dimensions.get('window').width / 2, padding: 16 } }}
           />
-          <Button
+          {/* <Button
             style={styles.logginButton}
             onPress={reload}
-            title="Buscar" />
+            title="Buscar"
+          /> */}
+          <Ionicons
+            style={{ padding: 16 }}
+            name='ios-search'
+            size={30}
+            onPress={reload}
+          />
+          <Ionicons
+            style={{ padding: 16 }}
+            name='md-person'
+            size={30}
+            onPress={openLogin}
+          />
         </View>
+
+      </View>
+
+
+      <View style={styles.body}>
+
 
         <MapView style={styles.bodyMap}
           initialRegion={currentRegion}
@@ -173,7 +187,7 @@ export default function Map() {
           }
         </MapView>
       </View>
-    </View >
+    </View>
   );
 }
 
