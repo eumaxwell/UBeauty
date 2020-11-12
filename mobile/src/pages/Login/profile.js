@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, TouchableOpacity, Linking, FlatList, Button, TextInput, Picker/* a correta da erro no expo */ } from "react-native";
+import { View, Text, Image, TouchableOpacity, Linking, FlatList, Picker/* a correta da erro no expo */ } from "react-native";
 //import {Picker} from '@react-native-community/picker'; // erro na lib usando expo
 
 //import Gallery from 'react-native-image-gallery';
@@ -12,9 +12,9 @@ import { Avatar, Card, Title, Paragraph } from 'react-native-paper';
 //https://streetsmartdev.com/create-horizontal-list-react-native/
 //import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation } from "@react-navigation/native";
-import { Feather } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import api from "../../services/api";
-import styles from "./styles";
+import styles from "./profileStyles";
 import CalendarStrip from 'react-native-calendar-strip';
 
 import userInstagram from "user-instagram";
@@ -25,6 +25,9 @@ import { getCurrentPositionAsync, requestPermissionsAsync } from 'expo-location'
 import DateTimePicker from '@react-native-community/datetimepicker';
 //import moment from 'moment';
 import WheelPicker from '@gregfrench/react-native-wheel-picker'
+import { Button, TextInput } from 'react-native-paper';
+import theme from '../../theme/theme'
+
 const WheelPickerItem = Picker.Item;
 
 export default function Profile(params) {
@@ -180,16 +183,16 @@ export default function Profile(params) {
 
     useEffect(() => {
 
-        if (action === "Gallery") {
+        if (action === "Gallery" || action === "") {
             setScreen(
                 <FlatList
                     horizontal
                     data={maker.gallery}
                     renderItem={({ item }) =>
-                        <Card>
-                            <Card.Cover source={{ uri: item.imageUrl }} />
-                            <Card.Content>
-                                <Title>{item.title}</Title>
+                        <Card style={{ marginHorizontal: 8, width: 340, height: 220 }}>
+                            <Card.Cover style={{resizeMode: 'contain'}} source={{ uri: item.imageUrl }} />
+                            <Card.Content style={{position: 'absolute', bottom: 0, backgroundColor: '#FFFA', elevation: 2}}>
+                                <Text>{item.title}</Text>
                             </Card.Content>
                         </Card>
                     }
@@ -218,7 +221,6 @@ export default function Profile(params) {
             setScreen(
 
                 <View>
-
                     <FlatList
                         horizontal
                         data={maker.services}
@@ -247,7 +249,7 @@ export default function Profile(params) {
 
             );
         } else if (action === "Calendar") {
-            
+
             setScreen(
                 <View>
                     <CalendarStrip
@@ -350,80 +352,89 @@ export default function Profile(params) {
     return (
 
         <View style={styles.container}>
-            <View>
-                <View>
-                    <Text>{'www.instagram.com/'}</Text>
-                    <TextInput
-                        style={styles.bodyInput}
-                        placeholder="nome_no_instagram"
-                        onChangeText={text => setInstagramName(text)}
-                        value={instagramName}
-                    />
-                </View>
-                <TextInput
-                    style={styles.bodyInput}
-                    placeholder="Numero do whatsapp"
-                    value={whatsapp}
-                    onChange={e => setWhatsapp(e.target.value)}
-                />
-                <Button
-                    style={styles.logginButton}
-                    onPress={createMakerByInstagram}
-                    title="Carregar dados" />
-                <Button
-                    style={styles.logginButton}
-                    onPress={loadMyPosition}
-                    title="Redefinir Localização" />
-            </View>
-
             <View style={styles.header}>
-                <Image style={styles.headerAvatar} source={{ uri: maker.avatarUrl }} />
-                <Text style={styles.headerTitle}>{maker.name}</Text>
-                <Text style={styles.headerDescription}>{maker.bio}</Text>
-            </View>
-
-            <View style={styles.actionBar}>
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => setAction("Gallery")}
-                >
-                    <Feather name="arrow-left" size={28} color="#E02041" />
-                    <Text style={styles.buttonText}>Gallery</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => setAction("Services")}
-                >
-                    <Feather name="arrow-left" size={28} color="#E02041" />
-                    <Text style={styles.buttonText}>Services</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => setAction("Calendar")}
-                >
-                    <Feather name="arrow-left" size={28} color="#E02041" />
-                    <Text style={styles.buttonText}>Calendar</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => setAction("Contact")}
-                >
-                    <Feather name="arrow-left" size={28} color="#E02041" />
-                    <Text style={styles.buttonText}>Contact</Text>
-                </TouchableOpacity>
+                <View style={styles.headerImage}>
+                    <Image style={styles.headerAvatar} source={{ uri: maker.avatarUrl }} />
+                </View>
+                <View style={styles.headerContent}>
+                    <Text style={styles.headerTitle}>{maker.name}</Text>
+                    <Text style={styles.headerDescription}>{maker.bio}</Text>
+                </View>
             </View>
 
             <View style={styles.body}>
-                {screen}
+
+                <View style={styles.actionBar}>
+                    <TouchableOpacity
+                        onPress={() => setAction("Gallery")}
+                    >
+                        <Ionicons name="ios-images" size={28} color={theme.colors.primary} />
+                        <Text style={styles.buttonText}>Gallery</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={() => setAction("Services")}
+                    >
+                        <Ionicons name="ios-brush" size={28} color={theme.colors.primary} />
+                        <Text style={styles.buttonText}>Services</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={() => setAction("Calendar")}
+                    >
+                        <Ionicons name="ios-calendar" size={28} color={theme.colors.primary} />
+                        <Text style={styles.buttonText}>Calendar</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={() => setAction("Contact")}
+                    >
+                        <Ionicons name="ios-call" size={28} color={theme.colors.primary} />
+                        <Text style={styles.buttonText}>Contact</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View style={styles.bodyContent}>
+                    {screen}
+                </View>
+
+                <View>
+                    <Text>
+                        Faça a sincronização com o Instagram.
+                    </Text>
+                    <View>
+                        <Text>{'www.instagram.com/'}</Text>
+                        <TextInput
+                            label="Usuário"
+                            value={instagramName}
+                            type="outlined"
+                            onChangeText={text => setInstagramName(text)}
+                        />
+                    </View>
+                    <Button style={styles.button} mode="contained" onPress={createMakerByInstagram}>
+                        Carregar dados
+                    </Button>
+                </View>
+                <View>
+                    <TextInput
+                        label="Número do whatsapp"
+                        value={whatsapp}
+                        onChangeText={e => setWhatsapp(e.target.value)}
+                        type="outlined"
+                    />
+
+                    {/* <Button style={styles.button} mode="contained" onPress={loadMyPosition}>
+                        Redefinir Localização
+                    </Button> */}
+                </View>
             </View>
 
-            <Button
-                style={styles.logginButton}
-                onPress={submitMaker}
-                title="Salvar" />
+            <View style={styles.footer}>
+                <Button style={styles.button} mode="contained" onPress={submitMaker}>
+                    Salvar
+                </Button>
+            </View>
+
 
 
             <View>

@@ -82,7 +82,9 @@ export default function Login() {
           </View>
 
           <View style={styles.bodyLoginButtons}>
-            <Button style={styles.button} mode="contained" onPress={handleLogin}>
+
+
+            <Button style={styles.button} mode="contained" onPress={() => navigation.navigate("PosLogin")}>
               Login
             </Button>
 
@@ -104,12 +106,16 @@ export default function Login() {
       </View>
 
       <View style={styles.footer}>
-        <TouchableOpacity onPress={() => navigation.navigate("MapPage")}>
-          <Text style={{fontSize: 16, opacity: 0.6}}>Pular</Text>
+        <TouchableOpacity style={{ padding: 24 }} onPress={() => navigation.navigate("MapPage")}>
+          <Text style={{ fontSize: 16, opacity: 0.6 }}>Pular</Text>
         </TouchableOpacity>
       </View>
 
-    </View>
+    </View >
 
   );
 }
+
+/* <Button style={styles.button} mode="contained" onPress={handleLogin}>
+              Login
+            </Button> */
